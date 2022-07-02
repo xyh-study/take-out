@@ -1,0 +1,12 @@
+
+
+
+###
+GET http://localhost:8080/test
+###
+GET http://localhost:8080/queryAll/2/6
+###
+GET http://localhost:8080/tbShop/2/4
+
+###
+GET http://localhost:8080/category
