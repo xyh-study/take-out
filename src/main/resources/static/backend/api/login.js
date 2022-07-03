@@ -12,3 +12,11 @@ function logoutApi(){
     'method': 'post',
   })
 }
+
+
+function isLoginApi(){
+  return $axios({
+    'url': '/employee/isLogin',
+    'method': 'post',
+  })
+}

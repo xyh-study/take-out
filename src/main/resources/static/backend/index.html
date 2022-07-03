@@ -169,6 +169,7 @@
             this.userInfo = JSON.parse(userInfo)
           }
           this.closeLoading()
+          this.isLogin();
         },
         beforeDestroy() {
           this.timer = null
@@ -206,6 +207,13 @@
             this.timer = setTimeout(()=>{
               this.loading = false
             },1000)
+          },
+          isLogin(){
+            isLoginApi().then((res)=>{
+              if(res.code === 0){
+                window.location.href = '/backend/page/login/login.html'
+              }
+            })
           }
         }
       })

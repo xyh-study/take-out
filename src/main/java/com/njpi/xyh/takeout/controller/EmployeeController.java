@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,27 +33,26 @@ public class EmployeeController extends ApiController {
 
 
     @PostMapping("login")
-    public Result<Employee> login(@Validated @RequestBody Employee employee){
+    public Result<Employee> login(@Validated @RequestBody Employee employee) {
         return employeeService.login(employee);
     }
 
     @PostMapping("logout")
-    public Result logout(){
+    public Result logout() {
         return employeeService.logout();
     }
 
-
-    /**
-     * 分页查询所有数据
-     *
-     * @param page     分页对象
-     * @param employee 查询实体
-     * @return 所有数据
-     */
-    @GetMapping
-    public R selectAll(Page<Employee> page, Employee employee) {
-        return success(this.employeeService.page(page, new QueryWrapper<>(employee)));
+    @PostMapping("isLogin")
+    public Result isLogin() {
+        return employeeService.isLogin();
     }
+
+    @GetMapping("page")
+    public Result<Page<Employee>> employeePage(Integer page, Integer pageSize, @RequestParam(required = false) String name) {
+        return employeeService.findPage(page,pageSize,name);
+    }
+
+
 
     /**
      * 通过主键查询单条数据
@@ -61,9 +61,10 @@ public class EmployeeController extends ApiController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public R selectOne(@PathVariable Serializable id) {
-        return success(this.employeeService.getById(id));
+    public Result<Employee> selectOne(@PathVariable Serializable id) {
+        return Result.success(this.employeeService.getById(id));
     }
+
 
     /**
      * 新增数据
@@ -72,8 +73,8 @@ public class EmployeeController extends ApiController {
      * @return 新增结果
      */
     @PostMapping
-    public R insert(@RequestBody Employee employee) {
-        return success(this.employeeService.save(employee));
+    public Result insert(@Validated @RequestBody Employee employee) {
+        return employeeService.saveEmployee(employee);
     }
 
     /**
@@ -83,8 +84,9 @@ public class EmployeeController extends ApiController {
      * @return 修改结果
      */
     @PutMapping
-    public R update(@RequestBody Employee employee) {
-        return success(this.employeeService.updateById(employee));
+    public Result update(@RequestBody Employee employee) {
+
+        return employeeService.updateEmployeeById(employee);
     }
 
     /**
@@ -97,5 +99,7 @@ public class EmployeeController extends ApiController {
     public R delete(@RequestParam("idList") List<Long> idList) {
         return success(this.employeeService.removeByIds(idList));
     }
+
+
 }
 

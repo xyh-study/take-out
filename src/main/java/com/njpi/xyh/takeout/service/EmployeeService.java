@@ -1,5 +1,6 @@
 package com.njpi.xyh.takeout.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.njpi.xyh.takeout.entity.Employee;
 import com.njpi.xyh.takeout.result.Result;
@@ -17,5 +18,13 @@ public interface EmployeeService extends IService<Employee> {
 
     Result logout();
 
+    Result isLogin();
+
+
+    Result<Page<Employee>> findPage(Integer page, Integer pageSize, String name);
+
+    Result saveEmployee(Employee employee);
+
+    Result updateEmployeeById(Employee employee);
 }
 

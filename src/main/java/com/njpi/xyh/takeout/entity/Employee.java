@@ -41,7 +41,6 @@ public class Employee extends Model<Employee> {
     /**
      * 密码
      */
-    @NotBlank(message = "password 不能为空")
     @TableField(value = "password")
     private String password;
 

@@ -10,26 +10,24 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
+
 
 /**
  * @author: xyh
  * @create: 2022/6/26 20:11
  */
 @ControllerAdvice
-@ResponseBody
 @Slf4j
 public class GlobalException {
 
-    /**
-     * ResponseEntity 返回状态
-     * 如果不套ResponseEntity 返回值的话
-     * @param
-     * @return
-     */
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<Result> login(AuthenticationException e){
-//        return ResponseEntity.ok(e.getResult());
-//    }
+
+    @Resource
+    private HttpServletResponse response;
+
 
 
     /**
@@ -38,8 +36,9 @@ public class GlobalException {
      * @return
      */
     @ExceptionHandler(AuthenticationException.class)
+    @ResponseBody
     public Result login(AuthenticationException e){
-        log.debug("login");
+        log.debug("异常信息 ---- > {}",e.getResult().getMsg());
         return e.getResult();
     }
 
@@ -48,6 +47,7 @@ public class GlobalException {
      * @return
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
     public Result validate(MethodArgumentNotValidException e){
         // 只需要获取 第一个校验失败的错误返回
         String defaultMessage = e.getAllErrors().get(0).getDefaultMessage();
@@ -55,5 +55,21 @@ public class GlobalException {
         return Result.error(defaultMessage);
     }
 
+
+
+
+    /**
+     * 数据插入异常
+     * @return
+     */
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    @ResponseBody
+    public Result insert(SQLIntegrityConstraintViolationException e){
+            if(e.getMessage().contains("Duplicate")){
+                String[] split = e.getMessage().split(" ");
+                return Result.error(split[2] +" 已经存在");
+            }
+        return Result.error("未知错误");
+    }
 
 }
