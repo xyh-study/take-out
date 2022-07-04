@@ -31,7 +31,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (employee == null) {
             log.info("当前请求： {} 被拦截", requestURI);
             // 抛出跳转到登录界面的异常
-            throw new AuthenticationException(Result.error("认证失败"));
+            // 在前端的拦截器中 错误信息 如果返回的是NOTLOGIN 就会跳转带首页
+            throw new AuthenticationException(Result.error("NOTLOGIN"));
         }
 
         log.info("当前请求： {} 被放行", requestURI);

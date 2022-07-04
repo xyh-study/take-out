@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.njpi.xyh.takeout.entity.Category;
 import com.njpi.xyh.takeout.entity.Dish;
 import com.njpi.xyh.takeout.service.DishService;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,10 @@ public class DishController extends ApiController {
      */
     @Resource
     private DishService dishService;
+
+
+
+
 
     /**
      * 分页查询所有数据

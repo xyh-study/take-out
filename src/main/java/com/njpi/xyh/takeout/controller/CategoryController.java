@@ -31,7 +31,10 @@ public class CategoryController extends ApiController {
     private CategoryService categoryService;
 
 
-
+    @GetMapping("page")
+    public Result<Page<Category>> categoryPage(Integer page,Integer pageSize){
+        return categoryService.findPage(page,pageSize);
+    }
 
 
     /**
@@ -64,8 +67,8 @@ public class CategoryController extends ApiController {
      * @return 新增结果
      */
     @PostMapping
-    public R insert(@RequestBody Category category) {
-        return success(this.categoryService.save(category));
+    public Result insert(@RequestBody Category category) {
+        return Result.success(categoryService.save(category));
     }
 
     /**
@@ -75,19 +78,17 @@ public class CategoryController extends ApiController {
      * @return 修改结果
      */
     @PutMapping
-    public R update(@RequestBody Category category) {
-        return success(this.categoryService.updateById(category));
+    public Result update(@RequestBody Category category) {
+        return Result.success(this.categoryService.updateById(category));
     }
 
     /**
      * 删除数据
-     *
-     * @param idList 主键结合
      * @return 删除结果
      */
     @DeleteMapping
-    public R delete(@RequestParam("idList") List<Long> idList) {
-        return success(this.categoryService.removeByIds(idList));
+    public Result delete(@RequestParam("ids") Long id) {
+        return categoryService.dropById(id);
     }
 }
 
