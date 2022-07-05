@@ -1,3 +1,9 @@
+POST http://localhost:8080/common/upload
+Content-Type: application/json
+
+{}
+
+###
 
 
 
@@ -10,3 +16,8 @@ GET http://localhost:8080/tbShop/2/4
 
 ###
 GET http://localhost:8080/category
+
+###
+DELETE http://localhost:8080/dish
+
+

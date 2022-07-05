@@ -27,7 +27,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
                 "/employee/logout", // 退出接口
                 "/employee/isLogin", // 是否登录
                 "/backend/**", // 放行管理界面所有静态资源
-                "/front/**"  // 放行用户界面所有静态资源
+                "/front/**" // 放行用户界面所有静态资源
         );
     }
 

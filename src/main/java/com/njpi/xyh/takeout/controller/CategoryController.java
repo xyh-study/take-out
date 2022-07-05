@@ -31,9 +31,30 @@ public class CategoryController extends ApiController {
     private CategoryService categoryService;
 
 
+    /**
+     * 根据type 获取分类下的数据
+     *
+     * @param type 分类
+     * @return
+     */
+    @GetMapping("list")
+    public Result<List<Category>> categoryList(Integer type) {
+        List<Category> categoryList = categoryService.list(new QueryWrapper<Category>().eq("type", type));
+        return Result.success(categoryList);
+
+    }
+
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("page")
-    public Result<Page<Category>> categoryPage(Integer page,Integer pageSize){
-        return categoryService.findPage(page,pageSize);
+    public Result<Page<Category>> categoryPage(Integer page, Integer pageSize) {
+        return categoryService.findPage(page, pageSize);
     }
 
 
@@ -84,6 +105,7 @@ public class CategoryController extends ApiController {
 
     /**
      * 删除数据
+     *
      * @return 删除结果
      */
     @DeleteMapping

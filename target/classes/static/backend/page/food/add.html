@@ -339,11 +339,11 @@
               if (String(res.code) === '1') {
                 this.ruleForm = { ...res.data }
                 this.ruleForm.price = String(res.data.price/100)
-                this.ruleForm.status = res.data.status == '1'
+                this.ruleForm.status = res.data.status === '1'
                 this.dishFlavors = res.data.flavors && res.data.flavors.map(obj => ({ ...obj, value: JSON.parse(obj.value),showOption: false }))
                 console.log('this.dishFlavors',this.dishFlavors)
-                // this.ruleForm.id = res.data.data.categoryId
-                // this.imageUrl = res.data.data.image
+                this.ruleForm.id = res.data.id
+                this.imageUrl = res.data.image
                 this.imageUrl = `/common/download?name=${res.data.image}`
               } else {
                 this.$message.error(res.msg || '操作失败')

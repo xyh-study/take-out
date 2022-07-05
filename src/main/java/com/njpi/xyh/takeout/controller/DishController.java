@@ -2,17 +2,25 @@ package com.njpi.xyh.takeout.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.njpi.xyh.takeout.dto.DishDTO;
 import com.njpi.xyh.takeout.entity.Category;
 import com.njpi.xyh.takeout.entity.Dish;
+import com.njpi.xyh.takeout.result.Result;
+import com.njpi.xyh.takeout.service.CategoryService;
 import com.njpi.xyh.takeout.service.DishService;
+import com.sun.org.apache.regexp.internal.RE;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 菜品管理(Dish)表控制层
@@ -29,20 +37,44 @@ public class DishController extends ApiController {
     @Resource
     private DishService dishService;
 
-
-
-
+    @Resource
+    private CategoryService categoryService;
 
     /**
-     * 分页查询所有数据
-     *
-     * @param page 分页对象
-     * @param dish 查询实体
-     * @return 所有数据
+     * 分页查询
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
      */
-    @GetMapping
-    public R selectAll(Page<Dish> page, Dish dish) {
-        return success(this.dishService.page(page, new QueryWrapper<>(dish)));
+    @GetMapping("page")
+    public Result selectAll(Integer page, Integer pageSize, @RequestParam(required = false) String name) {
+
+        Page<Dish> pageList = null;
+        Page<DishDTO> dishDTOPage = new Page<>();
+        if (!StringUtils.hasText(name)) {
+             pageList =dishService.page(new Page<>(page,pageSize));
+        }else{
+            pageList =dishService.page(new Page<>(page,pageSize),new QueryWrapper<Dish>().like("name",name));
+        }
+
+        // 将 dish-----> dishDTO
+        List<DishDTO> collect = pageList.getRecords().stream().map(s -> {
+            DishDTO dishDTO = new DishDTO();
+            //1. 将对象copy成dishDTO
+            BeanUtils.copyProperties(s, dishDTO);
+            //2. 根据id 查询categoryName
+            Category category = categoryService.getById(s.getCategoryId());
+            String categoryName = category.getName();
+            dishDTO.setCategoryName(categoryName);
+            return dishDTO;
+        }).collect(Collectors.toList());
+
+
+        BeanUtils.copyProperties(pageList,dishDTOPage);
+
+        dishDTOPage.setRecords(collect);
+        return Result.success(dishDTOPage);
     }
 
     /**
@@ -52,19 +84,18 @@ public class DishController extends ApiController {
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public R selectOne(@PathVariable Serializable id) {
-        return success(this.dishService.getById(id));
+    public Result selectOne(@PathVariable Serializable id) {
+        return dishService.getDishById(id);
     }
 
     /**
      * 新增数据
      *
-     * @param dish 实体对象
      * @return 新增结果
      */
     @PostMapping
-    public R insert(@RequestBody Dish dish) {
-        return success(this.dishService.save(dish));
+    public Result insert(@RequestBody DishDTO dishDTO) {
+        return  dishService.saveDishDTO(dishDTO);
     }
 
     /**
@@ -74,8 +105,8 @@ public class DishController extends ApiController {
      * @return 修改结果
      */
     @PutMapping
-    public R update(@RequestBody Dish dish) {
-        return success(this.dishService.updateById(dish));
+    public Result update(@RequestBody DishDTO dishDTO) {
+        return dishService.updateDishById(dishDTO);
     }
 
     /**
@@ -85,8 +116,35 @@ public class DishController extends ApiController {
      * @return 删除结果
      */
     @DeleteMapping
-    public R delete(@RequestParam("idList") List<Long> idList) {
-        return success(this.dishService.removeByIds(idList));
+    public Result delete(@RequestParam("ids") List<Long> idList) {
+        return Result.success(dishService.removeByIds(idList));
     }
+
+
+    /**
+     *  是否停用和启用
+     *
+     *flag  0 :停售  1: 起售
+     * @param idList 主键结合
+     * @return 删除结果
+     */
+    @PostMapping("status/{flag}")
+    public Result statusStop(@PathVariable("flag") Integer flag , @RequestParam("ids") List<Long> idList) {
+            if(idList.isEmpty()){
+                return Result.error("id不能为空");
+            }
+
+            idList.forEach(s->{
+                //1. 现根据id 获取到菜品
+                Dish dish = dishService.getById(s);
+                //2. 修改菜品状态
+                dish.setStatus(flag);
+                //3. 保存修改
+                dishService.updateById(dish);
+            });
+
+        return Result.success("修改成功");
+    }
+
 }
 
