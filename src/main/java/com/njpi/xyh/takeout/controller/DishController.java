@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -145,6 +146,19 @@ public class DishController extends ApiController {
 
         return Result.success("修改成功");
     }
+
+
+    /**
+     * 根据分类id 获取菜品
+     * @param
+     * @return
+     */
+    @GetMapping("list")
+    public Result list(BigInteger categoryId){
+        List<Dish> dishList = dishService.list(new QueryWrapper<Dish>().eq("category_id", categoryId));
+        return Result.success(dishList);
+    }
+
 
 }
 

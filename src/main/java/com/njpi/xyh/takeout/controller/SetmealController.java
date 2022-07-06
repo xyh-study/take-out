@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.njpi.xyh.takeout.dto.SetmealDto;
 import com.njpi.xyh.takeout.entity.Setmeal;
+import com.njpi.xyh.takeout.result.Result;
 import com.njpi.xyh.takeout.service.SetmealService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,16 +30,24 @@ public class SetmealController extends ApiController {
     @Resource
     private SetmealService setmealService;
 
+
     /**
      * 分页查询所有数据
      *
-     * @param page    分页对象
-     * @param setmeal 查询实体
+     * @param page 分页对象
      * @return 所有数据
      */
-    @GetMapping
-    public R selectAll(Page<Setmeal> page, Setmeal setmeal) {
-        return success(this.setmealService.page(page, new QueryWrapper<>(setmeal)));
+    @GetMapping("page")
+    public Result selectAll(Integer page, Integer pageSize, @RequestParam(required = false) String name) {
+
+        Page<Setmeal> setmealPage = null;
+        if (name == null) {
+             setmealPage = setmealService.page(new Page<>(page, pageSize));
+        } else {
+            setmealPage = setmealService.page(new Page<>(page, pageSize),new QueryWrapper<Setmeal>().like("name",name));
+        }
+        return Result.success(setmealPage);
+
     }
 
     /**
@@ -51,16 +61,18 @@ public class SetmealController extends ApiController {
         return success(this.setmealService.getById(id));
     }
 
+
     /**
      * 新增数据
      *
-     * @param setmeal 实体对象
+     * @param
      * @return 新增结果
      */
     @PostMapping
-    public R insert(@RequestBody Setmeal setmeal) {
-        return success(this.setmealService.save(setmeal));
+    public Result insert(@RequestBody SetmealDto setmealDto) {
+        return setmealService.saveStemeal(setmealDto);
     }
+
 
     /**
      * 修改数据
@@ -83,5 +95,7 @@ public class SetmealController extends ApiController {
     public R delete(@RequestParam("idList") List<Long> idList) {
         return success(this.setmealService.removeByIds(idList));
     }
+
+
 }
 

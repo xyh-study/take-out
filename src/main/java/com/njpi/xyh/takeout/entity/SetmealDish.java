@@ -1,10 +1,9 @@
 package com.njpi.xyh.takeout.entity;
 
 
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +17,7 @@ import java.util.Date;
  */
 @SuppressWarnings("serial")
 @TableName("setmeal_dish")
+@Data
 public class SetmealDish extends Model<SetmealDish> {
     /**
      * 主键
@@ -29,13 +29,13 @@ public class SetmealDish extends Model<SetmealDish> {
      * 套餐id
      */
     @TableField(value = "setmeal_id")
-    private String setmealId;
+    private Long setmealId;
 
     /**
      * 菜品id
      */
     @TableField(value = "dish_id")
-    private String dishId;
+    private Long dishId;
 
     /**
      * 菜品名称 （冗余字段）
@@ -64,129 +64,36 @@ public class SetmealDish extends Model<SetmealDish> {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time")
+    @TableField(value = "create_time",fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "update_time")
+    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**
      * 创建人
      */
-    @TableField(value = "create_user")
+    @TableField(value = "create_user",fill = FieldFill.INSERT)
     private Long createUser;
 
     /**
      * 修改人
      */
-    @TableField(value = "update_user")
+    @TableField(value = "update_user",fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
     /**
      * 是否删除
      */
     @TableField(value = "is_deleted")
-    private Integer isDeleted;
+    @TableLogic(value = "0")
+   private Integer isDeleted;
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSetmealId() {
-        return setmealId;
-    }
-
-    public void setSetmealId(String setmealId) {
-        this.setmealId = setmealId;
-    }
-
-    public String getDishId() {
-        return dishId;
-    }
-
-    public void setDishId(String dishId) {
-        this.dishId = dishId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getCopies() {
-        return copies;
-    }
-
-    public void setCopies(Integer copies) {
-        this.copies = copies;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Long getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Long createUser) {
-        this.createUser = createUser;
-    }
-
-    public Long getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Long updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Integer getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
-    }
 
 }
 
