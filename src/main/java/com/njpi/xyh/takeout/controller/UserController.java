@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.njpi.xyh.takeout.entity.User;
+import com.njpi.xyh.takeout.result.Result;
 import com.njpi.xyh.takeout.service.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +29,12 @@ public class UserController extends ApiController {
      */
     @Resource
     private UserService userService;
+
+
+    @PostMapping("login")
+    public Result login(@Validated(User.Login.class) @RequestBody User user) {
+        return  userService.login(user);
+    }
 
     /**
      * 分页查询所有数据

@@ -1,6 +1,7 @@
 package com.njpi.xyh.takeout.interceptor;
 
 import com.njpi.xyh.takeout.entity.Employee;
+import com.njpi.xyh.takeout.entity.User;
 import com.njpi.xyh.takeout.exception.AuthenticationException;
 import com.njpi.xyh.takeout.result.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
 
         Employee employee = (Employee) session.getAttribute("employee");
+        User user = (User) session.getAttribute("user");
 
         if (employee == null) {
             log.info("当前请求： {} 被拦截", requestURI);
@@ -34,6 +36,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             // 在前端的拦截器中 错误信息 如果返回的是NOTLOGIN 就会跳转带首页
             throw new AuthenticationException(Result.error("NOTLOGIN"));
         }
+
+
+
+
 
         log.info("当前请求： {} 被放行", requestURI);
         return true;

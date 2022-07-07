@@ -2,6 +2,7 @@ package com.njpi.xyh.takeout.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.njpi.xyh.takeout.entity.AddressBook;
+import com.njpi.xyh.takeout.result.Result;
 
 /**
  * 地址管理(AddressBook)表服务接口
@@ -11,5 +12,6 @@ import com.njpi.xyh.takeout.entity.AddressBook;
  */
 public interface AddressBookService extends IService<AddressBook> {
 
+    Result saveAddressBook(AddressBook addressBook);
 }
 

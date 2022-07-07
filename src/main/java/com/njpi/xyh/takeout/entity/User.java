@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,6 +20,8 @@ import java.util.Date;
 @SuppressWarnings("serial")
 @TableName("user")
 public class User extends Model<User> {
+
+    public interface Login{};
     /**
      * 主键
      */
@@ -35,6 +38,7 @@ public class User extends Model<User> {
      * 手机号
      */
     @TableField(value = "phone")
+    @NotBlank(message = "手机号不能为空" ,groups = {Login.class})
     private String phone;
 
     /**

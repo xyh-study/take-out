@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.njpi.xyh.takeout.entity.AddressBook;
+import com.njpi.xyh.takeout.result.Result;
 import com.njpi.xyh.takeout.service.AddressBookService;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +59,8 @@ public class AddressBookController extends ApiController {
      * @return 新增结果
      */
     @PostMapping
-    public R insert(@RequestBody AddressBook addressBook) {
-        return success(this.addressBookService.save(addressBook));
+    public Result insert(@RequestBody AddressBook addressBook) {
+        return this.addressBookService.saveAddressBook(addressBook);
     }
 
     /**

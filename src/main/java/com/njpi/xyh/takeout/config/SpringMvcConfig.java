@@ -22,13 +22,14 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).excludePathPatterns(
-                "/employee/login", // 登录接口
-                "/employee/logout", // 退出接口
-                "/employee/isLogin", // 是否登录
-                "/backend/**", // 放行管理界面所有静态资源
-                "/front/**" // 放行用户界面所有静态资源
-        );
+//        registry.addInterceptor(loginInterceptor).excludePathPatterns(
+//                "/employee/login", // 登录接口
+//                "/employee/logout", // 退出接口
+//                "/user/**", // 用户登录接口
+//                "/employee/isLogin", // 是否登录
+//                "/backend/**", // 放行管理界面所有静态资源
+//                "/front/**" // 放行用户界面所有静态资源
+//        );
     }
 
     @Override
